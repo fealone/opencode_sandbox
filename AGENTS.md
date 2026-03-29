@@ -86,6 +86,7 @@ USER opencode
 **run.sh** - Container launch script
 - Validates workspace directory and config file
 - Converts paths to absolute
+- Supports `--import` option for session files
 - Executes `docker run` with proper mounts
 
 **permission.sh** - Permission management
@@ -97,9 +98,10 @@ USER opencode
 
 1. **Non-root execution**: Always run as `opencode` user (UID/GID 999)
 2. **Read-only config**: Mount config files with `:ro` flag
-3. **Workspace isolation**: Only `/workspace` directory accessible
-4. **Sensitive files**: Use `permission.sh restrict` for `.env`, credentials
-5. **Input validation**: Always validate paths before mounting
+3. **Read-only session files**: Mount session files with `:ro` flag
+4. **Workspace isolation**: Only `/workspace` directory accessible
+5. **Sensitive files**: Use `permission.sh restrict` for `.env`, credentials
+6. **Input validation**: Always validate paths before mounting
 
 ## File Patterns
 
@@ -120,6 +122,9 @@ USER opencode
 
 # Run OpenCode
 ./run.sh /path/to/workspace /path/to/config.json
+
+# Import session and launch
+./run.sh /path/to/workspace /path/to/config.json --import /path/to/session.json
 
 # Restrict sensitive files
 ./permission.sh restrict /path/to/workspace "*.env"
