@@ -1,0 +1,7 @@
+# packages.txt
+# Add additional packages here
+# One package name per line
+# Comments start with #
+#
+# Examples:
+# git

@@ -16,6 +16,7 @@ A Docker environment for running OpenCode in a sandboxed environment with isolat
 | `Dockerfile` | OpenCode environment definition |
 | `run.sh` | Launch script with workspace and config arguments |
 | `permission.sh` | Permission management script for workspace |
+| `packages.txt` | Additional packages to install in the container |
 
 ## Prerequisites
 
@@ -118,6 +119,28 @@ By default, the workspace is mounted with full read/write access. Use `permissio
 
 - **Image**: `node:20-slim`
 - **Package**: `opencode-ai@latest`
+
+## Adding Custom Packages
+
+To install additional packages in the container:
+
+1. Edit `packages.txt` and add package names (one per line)
+2. Rebuild the Docker image
+
+```bash
+# Edit packages.txt
+echo "python3" >> packages.txt
+echo "postgresql-client" >> packages.txt
+
+# Rebuild image
+docker build -t opencode-sandbox .
+```
+
+**Notes:**
+- Use `apt` package names (e.g., `python3`, `nodejs`)
+- Lines starting with `#` are treated as comments
+- Empty lines are ignored
+- The container will be rebuilt with the new packages
 
 ## License
 
