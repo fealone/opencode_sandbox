@@ -8,6 +8,7 @@ A Docker environment for running OpenCode in a sandboxed environment with isolat
 - **Non-root User**: Runs as `opencode` user for security
 - **External Configuration**: OpenCode config file can be specified from outside
 - **Clean Sessions**: Each session starts with a fresh environment
+- **Session Import**: Import and continue from previous sessions
 
 ## Files
 
@@ -55,6 +56,47 @@ Or use the `OPENCODE_CONFIG` environment variable:
 OPENCODE_CONFIG=/path/to/opencode.json ./run.sh /path/to/workspace
 ```
 
+### 4. Import a Session (Optional)
+
+To continue from a previous session:
+
+```bash
+./run.sh /path/to/workspace /path/to/opencode.json --import /path/to/session.json
+```
+
+## Session Management
+
+### Export a Session
+
+To export the latest session from a running OpenCode container:
+
+1. Run OpenCode with `run.sh` in one terminal:
+   ```bash
+   ./run.sh /path/to/workspace /path/to/opencode.json
+   ```
+
+2. In another terminal, export the latest session:
+   ```bash
+   # Get the container ID
+   CONTAINER_ID=$(docker ps -q --filter "name=opencode-session")
+
+   # Get the latest session ID
+   SESSION_ID=$(docker exec $CONTAINER_ID opencode session list --format json | jq -r '.[0].id')
+
+   # Export the session
+    docker exec $CONTAINER_ID sh -c "opencode export $SESSION_ID > session.json"
+   ```
+
+**Note:** This exports the most recent session. The JSON output will be written to `session.json` in your current directory. You can list all available sessions with `docker exec $CONTAINER_ID opencode session list`.
+
+### Import a Session
+
+To import a previously exported session:
+
+```bash
+./run.sh /path/to/workspace /path/to/config.json --import /path/to/session.json
+```
+
 ## Usage
 
 ### Basic Usage
@@ -63,10 +105,23 @@ OPENCODE_CONFIG=/path/to/opencode.json ./run.sh /path/to/workspace
 ./run.sh /path/to/workspace /path/to/config.json
 ```
 
+### Import Session
+
+```bash
+./run.sh /path/to/workspace /path/to/config.json --import /path/to/session.json
+```
+
 ### Arguments
 
 1. **Workspace Directory** (required): The directory to mount as `/workspace` inside the container
 2. **Config File Path** (optional): Path to the OpenCode configuration JSON file. If not provided, the `OPENCODE_CONFIG` environment variable will be used.
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--import <file>` | Import a session file before starting |
+| `-h`, `--help` | Show help message |
 
 ### Environment Variables
 
