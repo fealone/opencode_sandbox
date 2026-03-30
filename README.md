@@ -64,6 +64,39 @@ To continue from a previous session:
 ./run.sh /path/to/workspace /path/to/opencode.json --import /path/to/session.json
 ```
 
+## Session Management
+
+### Export a Session
+
+To export the latest session from a running OpenCode container:
+
+1. Run OpenCode with `run.sh` in one terminal:
+   ```bash
+   ./run.sh /path/to/workspace /path/to/opencode.json
+   ```
+
+2. In another terminal, export the latest session:
+   ```bash
+   # Get the container ID
+   CONTAINER_ID=$(docker ps -q --filter "name=opencode-session")
+
+   # Get the latest session ID
+   SESSION_ID=$(docker exec $CONTAINER_ID opencode session list --format json | jq -r '.[0].id')
+
+   # Export the session
+    docker exec $CONTAINER_ID sh -c "opencode export $SESSION_ID > session.json"
+   ```
+
+**Note:** This exports the most recent session. The JSON output will be written to `session.json` in your current directory. You can list all available sessions with `docker exec $CONTAINER_ID opencode session list`.
+
+### Import a Session
+
+To import a previously exported session:
+
+```bash
+./run.sh /path/to/workspace /path/to/config.json --import /path/to/session.json
+```
+
 ## Usage
 
 ### Basic Usage
