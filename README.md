@@ -93,7 +93,7 @@ To export the latest session from a running OpenCode container:
    SESSION_ID=$(docker exec $CONTAINER_ID opencode session list --format json | jq -r '.[0].id')
 
    # Export the session
-    docker exec $CONTAINER_ID sh -c "opencode export $SESSION_ID > session.json"
+   docker exec $CONTAINER_ID sh -c "opencode export $SESSION_ID > session.json"
    ```
 
 **Note:** This exports the most recent session. The JSON output will be written to `session.json` in your current directory. You can list all available sessions with `docker exec $CONTAINER_ID opencode session list`.
