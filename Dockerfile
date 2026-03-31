@@ -14,13 +14,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     jq \
     htop \
     build-essential \
-    && rm -rf /var/lib/apt/lists/*
+    shellcheck
 
 # Install additional packages from packages.txt
 COPY packages.txt /tmp/packages.txt
 RUN if [ -s /tmp/packages.txt ]; then \
         grep -v '^#' /tmp/packages.txt | grep -v '^$' | xargs -r apt-get install -y --no-install-recommends || true; \
-    fi && rm -f /tmp/packages.txt
+    fi && rm -f /tmp/packages.txt && rm -rf /var/lib/apt/lists/*
 
 # Create group with GID 999 and user with home directory
 RUN groupadd -r -g 999 opencode && \
