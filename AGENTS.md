@@ -10,10 +10,10 @@ Docker environment for running OpenCode in a sandboxed environment with isolated
 docker build -t opencode-sandbox .
 
 # Run shellcheck for script linting
-shellcheck run.sh permission.sh
+shellcheck run.sh permission.sh start_new_session.sh
 
 # Validate bash syntax
-bash -n run.sh && bash -n permission.sh
+bash -n run.sh && bash -n permission.sh && bash -n start_new_session.sh
 
 # Test scripts (manual verification)
 ./run.sh --help
@@ -94,6 +94,10 @@ USER opencode
 - Uses `find` with `-exec` for batch operations
 - Provides help via heredoc
 
+**start_new_session.sh** - New session launcher
+- Checks if container is running
+- Executes new `opencode` session via `docker exec`
+
 ## Security Considerations
 
 1. **Non-root execution**: Always run as `opencode` user (UID/GID 999)
@@ -109,6 +113,7 @@ USER opencode
 |------|---------|
 | `run.sh` | Docker container launcher |
 | `permission.sh` | Permission management CLI |
+| `start_new_session.sh` | New session launcher for running container |
 | `Dockerfile` | Container definition |
 
 ## Common Operations
@@ -125,6 +130,9 @@ USER opencode
 
 # Import session and launch
 ./run.sh /path/to/workspace /path/to/config.json --import /path/to/session.json
+
+# Start new session in running container
+./start_new_session.sh
 
 # Restrict sensitive files
 ./permission.sh restrict /path/to/workspace "*.env"

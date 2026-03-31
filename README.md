@@ -17,6 +17,7 @@ A Docker environment for running OpenCode in a sandboxed environment with isolat
 | `Dockerfile` | OpenCode environment definition |
 | `run.sh` | Launch script with workspace and config arguments |
 | `permission.sh` | Permission management script for workspace |
+| `start_new_session.sh` | Script to start new session in running container |
 | `packages.txt` | Additional packages to install in the container |
 
 ## Prerequisites
@@ -64,6 +65,14 @@ To continue from a previous session:
 ./run.sh /path/to/workspace /path/to/opencode.json --import /path/to/session.json
 ```
 
+### 5. Start New Session (Optional)
+
+If the container is already running, start a new OpenCode session:
+
+```bash
+./start_new_session.sh
+```
+
 ## Session Management
 
 ### Export a Session
@@ -84,7 +93,7 @@ To export the latest session from a running OpenCode container:
    SESSION_ID=$(docker exec $CONTAINER_ID opencode session list --format json | jq -r '.[0].id')
 
    # Export the session
-    docker exec $CONTAINER_ID sh -c "opencode export $SESSION_ID > session.json"
+   docker exec $CONTAINER_ID sh -c "opencode export $SESSION_ID > session.json"
    ```
 
 **Note:** This exports the most recent session. The JSON output will be written to `session.json` in your current directory. You can list all available sessions with `docker exec $CONTAINER_ID opencode session list`.
@@ -109,6 +118,14 @@ To import a previously exported session:
 
 ```bash
 ./run.sh /path/to/workspace /path/to/config.json --import /path/to/session.json
+```
+
+### Connect to Running Container
+
+Start a new OpenCode session in an existing container:
+
+```bash
+./start_new_session.sh
 ```
 
 ### Arguments
