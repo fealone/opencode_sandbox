@@ -105,7 +105,6 @@ To import a previously exported session:
 ```bash
 ./run.sh /path/to/workspace /path/to/config.json --import /path/to/session.json
 ```
-```
 
 ## Usage
 
@@ -127,7 +126,6 @@ Start a new OpenCode session in an existing container:
 
 ```bash
 ./start_new_session.sh
-```
 ```
 
 ### Arguments
